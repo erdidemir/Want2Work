@@ -3,8 +3,10 @@ using DoDo.Application.Features.Commands.Authentications.SignUpUser;
 using DoDo.Application.Features.Commands.Employees.AddEmployee;
 using DoDo.Application.Features.Commands.Employees.UpdateEmployee;
 using DoDo.Application.Models.Authentications;
+using DoDo.Application.Models.Companies;
 using DoDo.Application.Models.Employees;
 using DoDo.Domain.Entities.Authentications;
+using DoDo.Domain.Entities.Companies;
 using DoDo.Domain.Entities.Employees;
 using System;
 using System.Collections.Generic;
@@ -30,7 +32,13 @@ namespace DoDo.Application.Mappings
             CreateMap<Employee, EmployeeViewModel>().ReverseMap();
             CreateMap<Employee, AddEmployeeCommand>().ReverseMap();
             CreateMap<Employee, UpdateEmployeeCommand>().ReverseMap();
-            
+
+            #endregion
+
+            #region Companies
+
+            CreateMap<Company, CompanyViewModel>().ReverseMap();
+
             #endregion
         }
     }

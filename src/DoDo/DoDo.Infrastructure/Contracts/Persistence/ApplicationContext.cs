@@ -1,6 +1,8 @@
-﻿using DoDo.Domain.Configurations.Employees;
+﻿using DoDo.Domain.Configurations.Companies;
+using DoDo.Domain.Configurations.Employees;
 using DoDo.Domain.Entities.Authentications;
 using DoDo.Domain.Entities.Commons;
+using DoDo.Domain.Entities.Companies;
 using DoDo.Domain.Entities.Employees;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +47,11 @@ namespace DoDo.Infrastructure.Contracts.Persistence
             modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
 
 
+            #endregion
 
+            #region Companies
+
+            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
 
             #endregion
 
@@ -57,6 +63,7 @@ namespace DoDo.Infrastructure.Contracts.Persistence
         #region Employees
 
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Company> Companies { get; set; }
 
         #endregion
     }

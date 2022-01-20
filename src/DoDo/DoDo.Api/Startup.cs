@@ -39,6 +39,10 @@ namespace DoDo.Api
             services.Configure<JwtSettings>(Configuration.GetSection("JWT"));
             var jwt = Configuration.GetSection("JWT").Get<JwtSettings>();
 
+            services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
+
+            services.AddMemoryCache();
+
             services.AddIdentity<User, Role>(options =>
             {
                 options.Password.RequiredLength = 8;
