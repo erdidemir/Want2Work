@@ -5,13 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\" />
-    <Folder Include="Mappings\" />
-    <Folder Include="Models\Authentications\" />
     <Folder Include="Models\Companies\" />
-    <Folder Include="Models\Employees\" />
     <Folder Include="Models\Jobs\" />
-    <Folder Include="Models\Settings\" />
   </ItemGroup>
 
   <ItemGroup>

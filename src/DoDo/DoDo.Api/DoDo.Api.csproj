@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DoDo.Application\DoDo.Application.csproj" />
     <ProjectReference Include="..\DoDo.Infrastructure\DoDo.Infrastructure.csproj" />
   </ItemGroup>

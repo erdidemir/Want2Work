@@ -1,25 +1,63 @@
-﻿using DoDo.Domain.Entities.Authentications;
+﻿using DoDo.Domain.Configurations.Employees;
+using DoDo.Domain.Entities.Authentications;
+using DoDo.Domain.Entities.Commons;
+using DoDo.Domain.Entities.Employees;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DoDo.Infrastructure.Contracts.Persistence
 {
     public class ApplicationContext : IdentityDbContext<User, Role, int>
     {
-
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
-            : base(options)
-        { }
-
-        protected override void OnModelCreating(ModelBuilder builder)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            base.OnModelCreating(builder);
+        }
+
+        //public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        //{
+        //    foreach (var entry in ChangeTracker.Entries<EntityBase>())
+        //    {
+        //        switch (entry.State)
+        //        {
+        //            case EntityState.Added:
+        //                entry.Entity.CreatedDate = DateTime.Now;
+        //                break;
+        //            case EntityState.Modified:
+        //                entry.Entity.LastModifiedDate = DateTime.Now;
+        //                break;
+        //        }
+        //    }
+        //    return base.SaveChangesAsync(cancellationToken);
+        //}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            
+
+            #region Employees
+
+            modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+
+
+
+
+            #endregion
+
+            base.OnModelCreating(modelBuilder);
+
 
         }
+
+        #region Employees
+
+        public DbSet<Employee> Employees { get; set; }
+
+        #endregion
     }
 }

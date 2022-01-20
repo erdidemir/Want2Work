@@ -14,11 +14,11 @@ namespace DoDo.Application.Services.Commons
 
         Task<TEntity> GetByIdAsync(int entityId);
 
-        Task<IEnumerable<TEntity>> GetByIdsAsync(int[] entityIds);
+        Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<int> entityIds);
 
         IPagedList<TEntity> GetPagedEntities(Expression<Func<TEntity, bool>> predicate = null, string includeString = null, int pageIndex = 0, int pageSize = int.MaxValue, Sort sort = null);
 
-        Task<int> CountEntitiesAsync();
+        Task<int> CountAsync();
 
         #endregion
 
@@ -32,9 +32,9 @@ namespace DoDo.Application.Services.Commons
 
         #region Update
 
-        void UpdateAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
 
-        void UpdateRangeAsync(IEnumerable<TEntity> entities);
+        Task UpdateRangeAsync(IEnumerable<TEntity> entities);
 
         #region Sort
 
@@ -48,10 +48,10 @@ namespace DoDo.Application.Services.Commons
 
         #region Delete
 
-        void RemoveAsync(TEntity entity);
+        Task RemoveAsync(TEntity entity);
 
         /// <summary>
-        void RemoveRangeAsync(IEnumerable<TEntity> entities);
+        Task RemoveRangeAsync(IEnumerable<TEntity> entities);
 
         #endregion
 

@@ -1,8 +1,13 @@
+using DoDo.Api.Extensions;
 using DoDo.Application;
+using DoDo.Application.Models.Settings;
+using DoDo.Domain.Entities.Authentications;
 using DoDo.Infrastructure;
+using DoDo.Infrastructure.Contracts.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +36,21 @@ namespace DoDo.Api
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration);
 
-            // General Configuration
-            services.AddAutoMapper(typeof(Startup));
+            services.Configure<JwtSettings>(Configuration.GetSection("JWT"));
+            var jwt = Configuration.GetSection("JWT").Get<JwtSettings>();
+
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1d);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+            })
+               .AddEntityFrameworkStores<ApplicationContext>()
+               .AddDefaultTokenProviders();
+
+            services.ConfigureCors();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

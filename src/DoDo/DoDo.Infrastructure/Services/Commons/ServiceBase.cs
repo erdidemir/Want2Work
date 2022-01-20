@@ -77,7 +77,7 @@ namespace DoDo.Infrastructure.Services.Commons
             return new PagedList<TEntity>(query, pageIndex, pageSize);
         }
 
-        
+
         #endregion
 
         #region Insert
@@ -117,12 +117,12 @@ namespace DoDo.Infrastructure.Services.Commons
         /// Updates a entity
         /// </summary>
         /// <param name="entity">Entity</param>
-        public virtual void UpdateAsync(TEntity entity)
+        public virtual async Task UpdateAsync(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
-            _entityRepository.UpdateAsync(entity);
+            await _entityRepository.UpdateAsync(entity);
 
         }
 
@@ -130,15 +130,15 @@ namespace DoDo.Infrastructure.Services.Commons
         /// Update entities
         /// </summary>
         /// <param name="entity">Entity</param>
-        public virtual void UpdateRangeAsync(IEnumerable<TEntity> entities)
+        public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
 
-            _entityRepository.UpdateRangeAsync(entities);
+            await _entityRepository.UpdateRangeAsync(entities);
         }
 
-        
+
 
         #endregion
 
@@ -148,12 +148,12 @@ namespace DoDo.Infrastructure.Services.Commons
         /// Removes a entity
         /// </summary>
         /// <param name="entitiy">The entitiy</param>
-        public virtual void RemoveAsync(TEntity entity)
+        public virtual async Task RemoveAsync(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
-            _entityRepository.RemoveAsync(entity);
+            await _entityRepository.RemoveAsync(entity);
 
 
         }
@@ -162,23 +162,15 @@ namespace DoDo.Infrastructure.Services.Commons
         /// Remove entities
         /// </summary>
         /// <param name="entities">Entities</param>
-        public virtual void RemoveRangeAsync(IEnumerable<TEntity> entities)
+        public virtual async Task RemoveRangeAsync(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
 
-            _entityRepository.RemoveRangeAsync(entities);
+            await _entityRepository.RemoveRangeAsync(entities);
         }
 
-        public Task<IEnumerable<TEntity>> GetByIdsAsync(int[] entityIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> CountEntitiesAsync()
-        {
-            throw new NotImplementedException();
-        }
+       
 
         #endregion
 

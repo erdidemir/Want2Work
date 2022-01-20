@@ -1,6 +1,10 @@
 ﻿using DoDo.Application.Contracts.Persistence.Repositories.Commons;
+using DoDo.Application.Contracts.Persistence.Repositories.Employees;
+using DoDo.Application.Services.Employees;
 using DoDo.Infrastructure.Contracts.Persistence;
 using DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons;
+using DoDo.Infrastructure.Contracts.Persistence.Repositories.Employees;
+using DoDo.Infrastructure.Services.Employees;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +25,19 @@ namespace DoDo.Infrastructure
             services.AddDbContext<ApplicationContext>(options =>
                                              options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
 
+            #region Commons
+
             services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+
+            #endregion
+
+            #region Employees
+
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
+
+            #endregion
+
 
 
 
