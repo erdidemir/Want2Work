@@ -11,5 +11,7 @@ namespace DoDo.Domain.Entities.Commons
         public int Id { get; protected set; }
         public DateTime CreatedDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public int DisplayOrder { get; set; }
+        public bool IsActive { get; set; }
     }
 }

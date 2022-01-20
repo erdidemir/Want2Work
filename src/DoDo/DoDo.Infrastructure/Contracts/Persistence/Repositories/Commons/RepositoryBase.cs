@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
 {
-    public class RepositoryBase<T> : IAsyncRepository<T> where T : EntityBase
+    public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
     {
         protected readonly ApplicationContext _dbContext;
 
@@ -18,6 +18,31 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
+
+        #region Properties
+
+        public virtual IQueryable<T> Table
+        {
+            get
+            {
+                return _dbContext.Set<T>();
+            }
+        }
+
+        /// <summary>
+        /// Gets a table with "no tracking" enabled (EF feature) Use it only when you load record(s) only for read-only operations
+        /// </summary>
+        public virtual IQueryable<T> TableNoTracking
+        {
+            get
+            {
+                return _dbContext.Set<T>().AsNoTracking();
+            }
+        }
+
+        #endregion
+
+        #region Select
 
         public async Task<IReadOnlyList<T>> GetAllAsync()
         {
@@ -62,6 +87,21 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
+        public virtual async Task<IEnumerable<T>> GetByIdsAsync(IEnumerable<int> ids)
+        {
+            return await _dbContext.Set<IEnumerable<T>>().FindAsync(ids);
+        }
+
+        public virtual async Task<int> CountAsync()
+        {
+            return await _dbContext.Set<T>().CountAsync();
+        }
+
+
+        #endregion
+
+        #region Insert
+
         public async Task<T> AddAsync(T entity)
         {
             _dbContext.Set<T>().Add(entity);
@@ -69,16 +109,42 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
             return entity;
         }
 
+        public virtual async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbContext.Set<T>().AddRangeAsync(entities);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #region Update
         public async Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(T entity)
+        public async Task UpdateRangeAsync(IEnumerable<T> entities)
+        {
+            _dbContext.Entry(entities).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #region Delete
+        public async Task RemoveAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task RemoveRangeAsync(IEnumerable<T> entities)
+        {
+            _dbContext.Set<T>().RemoveRange(entities);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        #endregion
     }
 }

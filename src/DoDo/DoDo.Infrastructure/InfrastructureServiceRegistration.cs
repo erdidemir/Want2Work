@@ -21,7 +21,7 @@ namespace DoDo.Infrastructure
             services.AddDbContext<ApplicationContext>(options =>
                                              options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
 
-            services.AddTransient(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
+            services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
 
 
