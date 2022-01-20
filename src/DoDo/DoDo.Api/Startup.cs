@@ -61,6 +61,16 @@ namespace DoDo.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DoDo.Api", Version = "v1" });
             });
+
+            #region Authorization
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+                     policy => policy.RequireRole("Administrator"));
+            });
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -32,6 +32,12 @@ namespace DoDo.Infrastructure
             services.AddDbContext<ApplicationContext>(options =>
                                              options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
 
+            #region Authentications
+
+           
+
+            #endregion
+
             #region Commons
 
             services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
