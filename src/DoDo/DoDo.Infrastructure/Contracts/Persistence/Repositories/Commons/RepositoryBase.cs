@@ -1,5 +1,7 @@
 ﻿using DoDo.Application.Contracts.Persistence.Repositories.Commons;
+using DoDo.Application.Services.Caches;
 using DoDo.Domain.Entities.Commons;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,15 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
     public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
     {
         protected readonly ApplicationContext _dbContext;
+        private readonly string cacheKey = $"{typeof(T)}";
+        private readonly ICacheService _cacheService;
 
-        public RepositoryBase(ApplicationContext dbContext)
+        public RepositoryBase(ApplicationContext dbContext,
+            ICacheService cacheService)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
+
         }
 
         #region Properties
@@ -46,7 +53,14 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
 
         public async Task<IReadOnlyList<T>> GetAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            if (!_cacheService.TryGet(cacheKey, out IReadOnlyList<T> cachedList))
+            {
+                cachedList = await _dbContext.Set<T>().ToListAsync();
+                _cacheService.Set(cacheKey, cachedList);
+            }
+
+            return cachedList;
+
         }
 
         public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate)
@@ -106,6 +120,7 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
         {
             _dbContext.Set<T>().Add(entity);
             await _dbContext.SaveChangesAsync();
+            BackgroundJob.Enqueue(() => RefreshCache());
             return entity;
         }
 
@@ -113,6 +128,7 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
         {
             await _dbContext.Set<T>().AddRangeAsync(entities);
             await _dbContext.SaveChangesAsync();
+            BackgroundJob.Enqueue(() => RefreshCache());
         }
 
         #endregion
@@ -122,12 +138,14 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
+            BackgroundJob.Enqueue(() => RefreshCache());
         }
 
         public async Task UpdateRangeAsync(IEnumerable<T> entities)
         {
             _dbContext.Entry(entities).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
+            BackgroundJob.Enqueue(() => RefreshCache());
         }
 
         #endregion
@@ -137,12 +155,25 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
+            BackgroundJob.Enqueue(() => RefreshCache());
         }
 
         public async Task RemoveRangeAsync(IEnumerable<T> entities)
         {
             _dbContext.Set<T>().RemoveRange(entities);
             await _dbContext.SaveChangesAsync();
+            BackgroundJob.Enqueue(() => RefreshCache());
+        }
+
+        #endregion
+
+        #region Caching
+
+        public async Task RefreshCache()
+        {
+            _cacheService.Remove(cacheKey);
+            var cachedList = await _dbContext.Set<T>().ToListAsync();
+            _cacheService.Set(cacheKey, cachedList);
         }
 
         #endregion

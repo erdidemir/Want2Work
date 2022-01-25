@@ -1,4 +1,5 @@
 ﻿using DoDo.Application.Contracts.Persistence.Repositories.Companies;
+using DoDo.Application.Services.Caches;
 using DoDo.Domain.Entities.Companies;
 using DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons;
 using System;
@@ -11,7 +12,7 @@ namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Companies
 {
     public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     {
-        public CompanyRepository(ApplicationContext dbContext) : base(dbContext)
+        public CompanyRepository(ApplicationContext dbContext, ICacheService cacheService) : base(dbContext, cacheService)
         {
         }
     }

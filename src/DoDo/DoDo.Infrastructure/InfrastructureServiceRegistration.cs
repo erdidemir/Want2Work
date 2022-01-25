@@ -1,7 +1,7 @@
 ﻿using DoDo.Application.Contracts.Persistence.Repositories.Commons;
 using DoDo.Application.Contracts.Persistence.Repositories.Companies;
 using DoDo.Application.Contracts.Persistence.Repositories.Employees;
-using DoDo.Application.Enums.Caches;
+using DoDo.Application.Models.Settings;
 using DoDo.Application.Services.Caches;
 using DoDo.Application.Services.Companies;
 using DoDo.Application.Services.Employees;
@@ -12,6 +12,8 @@ using DoDo.Infrastructure.Contracts.Persistence.Repositories.Employees;
 using DoDo.Infrastructure.Services.Caches;
 using DoDo.Infrastructure.Services.Companies;
 using DoDo.Infrastructure.Services.Employees;
+using Hangfire;
+using Hangfire.MySql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,9 +36,10 @@ namespace DoDo.Infrastructure
 
             #region Authentications
 
-           
+
 
             #endregion
+
 
             #region Commons
 
@@ -46,20 +49,7 @@ namespace DoDo.Infrastructure
 
             #region Caching
 
-            services.AddTransient<MemoryCacheService>();
-            //services.AddTransient<RedisCacheService>();
-            services.AddTransient<Func<CacheTech, ICacheService>>(serviceProvider => key =>
-            {
-                switch (key)
-                {
-                    case CacheTech.Memory:
-                        return serviceProvider.GetService<MemoryCacheService>();
-                    //case CacheTech.Redis:
-                    //    return serviceProvider.GetService<RedisCacheService>();
-                    default:
-                        return serviceProvider.GetService<MemoryCacheService>();
-                }
-            });
+            services.AddTransient<ICacheService, MemoryCacheService>();
 
             #endregion
 
@@ -74,6 +64,23 @@ namespace DoDo.Infrastructure
 
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyService, CompanyService>();
+
+            #endregion
+
+            #region Caching
+
+            services.AddHangfire(configuration => {
+                configuration.UseStorage(
+                    new MySqlStorage(
+                        mySqlConnectionStr,
+                        new MySqlStorageOptions
+                        {
+                            TablesPrefix = "Hangfire"
+                        }
+                    )
+                );
+            });
+            services.AddHangfireServer();
 
             #endregion
 

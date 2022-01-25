@@ -4,6 +4,7 @@ using DoDo.Application.Models.Settings;
 using DoDo.Domain.Entities.Authentications;
 using DoDo.Infrastructure;
 using DoDo.Infrastructure.Contracts.Persistence;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,11 +36,15 @@ namespace DoDo.Api
         {
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration);
+            
+            #region Settings
 
             services.Configure<JwtSettings>(Configuration.GetSection("JWT"));
             var jwt = Configuration.GetSection("JWT").Get<JwtSettings>();
 
             services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
+
+            #endregion
 
             services.AddMemoryCache();
 
@@ -88,6 +93,8 @@ namespace DoDo.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseHangfireDashboard("/jobs");
 
             app.UseEndpoints(endpoints =>
             {

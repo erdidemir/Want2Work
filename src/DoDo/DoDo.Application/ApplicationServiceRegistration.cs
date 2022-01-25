@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using DoDo.Application.Models.Settings;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
