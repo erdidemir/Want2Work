@@ -21,6 +21,8 @@ namespace DoDo.Domain.Configurations.Companies
 
             #region Index
 
+            entity.HasIndex(e => new { e.Name }, "UIX_Name").IsUnique();
+
             #endregion
         }
     }

@@ -4,6 +4,7 @@ using DoDo.Application.Models.Settings;
 using DoDo.Domain.Entities.Authentications;
 using DoDo.Infrastructure;
 using DoDo.Infrastructure.Contracts.Persistence;
+using DoDo.Infrastructure.MiddleWares.Exceptions;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -95,6 +96,8 @@ namespace DoDo.Api
             app.UseAuthorization();
 
             app.UseHangfireDashboard("/jobs");
+
+            app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
 
             app.UseEndpoints(endpoints =>
             {
