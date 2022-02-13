@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoDo.Application.Models.Employees
+namespace DoDo.Application.Models.Jobbers
 {
-    public class EmployeeViewModel
+    public class JobberViewModel
     {
         public int Id { get; set; }
         public int UserId { get; set; }

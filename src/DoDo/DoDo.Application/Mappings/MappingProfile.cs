@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using DoDo.Application.Features.Commands.Authentications.SignUpUser;
-using DoDo.Application.Features.Commands.Employees.AddEmployee;
-using DoDo.Application.Features.Commands.Employees.UpdateEmployee;
+using DoDo.Application.Features.Commands.Jobbers.AddJobber;
+using DoDo.Application.Features.Commands.Jobbers.UpdateJobber;
 using DoDo.Application.Models.Authentications;
 using DoDo.Application.Models.Companies;
-using DoDo.Application.Models.Employees;
+using DoDo.Application.Models.Jobbers;
 using DoDo.Domain.Entities.Authentications;
 using DoDo.Domain.Entities.Companies;
-using DoDo.Domain.Entities.Employees;
+using DoDo.Domain.Entities.Jobbers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +27,11 @@ namespace DoDo.Application.Mappings
 
             #endregion
 
-            #region Employees
+            #region Jobbers
 
-            CreateMap<Employee, EmployeeViewModel>().ReverseMap();
-            CreateMap<Employee, AddEmployeeCommand>().ReverseMap();
-            CreateMap<Employee, UpdateEmployeeCommand>().ReverseMap();
+            CreateMap<Jobber, JobberViewModel>().ReverseMap();
+            CreateMap<Jobber, AddJobberCommand>().ReverseMap();
+            CreateMap<Jobber, UpdateJobberCommand>().ReverseMap();
 
             #endregion
 

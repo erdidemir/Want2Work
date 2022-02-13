@@ -9,20 +9,14 @@ using System.Threading.Tasks;
 
 namespace DoDo.Domain.Configurations.Companies
 {
-    public class CompanyConfiguration : IEntityTypeConfiguration<Company>
+    public class LegalCompanyTypeConfiguration : IEntityTypeConfiguration<LegalCompanyType>
     {
-        public void Configure(EntityTypeBuilder<Company> entity)
+        public void Configure(EntityTypeBuilder<LegalCompanyType> entity)
         {
             entity.HasKey(e => e.Id);
             entity.Property(p => p.Name).IsRequired();
-            entity.Property(p => p.LegalCompanyTypeId).IsRequired();
 
             #region ForeingKey
-
-            entity.HasOne(d => d.LegalCompanyType)
-              .WithMany(p => p.Companies)
-              .HasForeignKey(d => d.LegalCompanyTypeId)
-              .OnDelete(DeleteBehavior.ClientNoAction);
 
             #endregion
 

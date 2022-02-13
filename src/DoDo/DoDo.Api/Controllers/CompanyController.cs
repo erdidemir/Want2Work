@@ -1,5 +1,5 @@
 ﻿using DoDo.Application.Models.Companies;
-using DoDo.Infrastructure.Queries.Companies;
+using DoDo.Application.Queries.Companies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
 ﻿using DoDo.Domain.Entities.Companies;
+using DoDo.Domain.Entities.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -7,22 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoDo.Domain.Configurations.Companies
+namespace DoDo.Domain.Configurations.Settings
 {
-    public class CompanyConfiguration : IEntityTypeConfiguration<Company>
+    public class CountryConfiguration : IEntityTypeConfiguration<Country>
     {
-        public void Configure(EntityTypeBuilder<Company> entity)
+        public void Configure(EntityTypeBuilder<Country> entity)
         {
             entity.HasKey(e => e.Id);
             entity.Property(p => p.Name).IsRequired();
-            entity.Property(p => p.LegalCompanyTypeId).IsRequired();
 
             #region ForeingKey
-
-            entity.HasOne(d => d.LegalCompanyType)
-              .WithMany(p => p.Companies)
-              .HasForeignKey(d => d.LegalCompanyTypeId)
-              .OnDelete(DeleteBehavior.ClientNoAction);
 
             #endregion
 

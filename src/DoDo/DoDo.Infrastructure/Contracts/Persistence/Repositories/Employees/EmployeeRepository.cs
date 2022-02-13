@@ -1,6 +1,6 @@
-﻿using DoDo.Application.Contracts.Persistence.Repositories.Employees;
+﻿using DoDo.Application.Contracts.Persistence.Repositories.Jobbers;
 using DoDo.Application.Services.Caches;
-using DoDo.Domain.Entities.Employees;
+using DoDo.Domain.Entities.Jobbers;
 using DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons;
 using System;
 using System.Collections.Generic;
@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Employees
+namespace DoDo.Infrastructure.Contracts.Persistence.Repositories.Jobbers
 {
-    public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
+    public class JobberRepository : RepositoryBase<Jobber>, IJobberRepository
     {
-        public EmployeeRepository(ApplicationContext dbContext, ICacheService cacheService) : base(dbContext, cacheService)
+        public JobberRepository(ApplicationContext dbContext, ICacheService cacheService) : base(dbContext, cacheService)
         {
         }
     }

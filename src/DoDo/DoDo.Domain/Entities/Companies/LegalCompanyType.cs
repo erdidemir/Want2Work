@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 
 namespace DoDo.Domain.Entities.Companies
 {
-    public class Company : EntityBase
+    public class LegalCompanyType : EntityBase
     {
+        public LegalCompanyType()
+        {
+            Companies = new HashSet<Company>();
+        }
         public string Name { get; set; }
 
-        public int LegalCompanyTypeId { get; set; }
-
-        public LegalCompanyType LegalCompanyType { get; set; }
-
-        public string WebSite { get; set; }
-        
+        public ICollection<Company> Companies { get; set; }
     }
 }

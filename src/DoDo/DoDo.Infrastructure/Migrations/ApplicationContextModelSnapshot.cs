@@ -93,6 +93,9 @@ namespace DoDo.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<byte[]>("ProfilePicture")
+                        .HasColumnType("longblob");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
@@ -133,15 +136,27 @@ namespace DoDo.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("LegalCompanyTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("WebSite")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LegalCompanyTypeId");
+
+                    b.HasIndex(new[] { "Name" }, "UIX_Name")
+                        .IsUnique();
+
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("DoDo.Domain.Entities.Employees.Employee", b =>
+            modelBuilder.Entity("DoDo.Domain.Entities.Companies.LegalCompanyType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,27 +168,60 @@ namespace DoDo.Infrastructure.Migrations
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("int");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("LastName")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "UserId" }, "UIX_UserId")
-                        .IsUnique();
+                    b.HasIndex(new[] { "Name" }, "UIX_Name")
+                        .IsUnique()
+                        .HasDatabaseName("UIX_Name1");
 
-                    b.ToTable("Employees");
+                    b.ToTable("LegalCompanyTypes");
+                });
+
+            modelBuilder.Entity("DoDo.Domain.Entities.Settings.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsEUCountry")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("TelephoneCode")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex(new[] { "Name" }, "UIX_Name")
+                        .IsUnique()
+                        .HasDatabaseName("UIX_Name2");
+
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -275,15 +323,15 @@ namespace DoDo.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("DoDo.Domain.Entities.Employees.Employee", b =>
+            modelBuilder.Entity("DoDo.Domain.Entities.Companies.Company", b =>
                 {
-                    b.HasOne("DoDo.Domain.Entities.Authentications.User", "User")
-                        .WithMany("Employees")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("DoDo.Domain.Entities.Companies.LegalCompanyType", "LegalCompanyType")
+                        .WithMany("Companies")
+                        .HasForeignKey("LegalCompanyTypeId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("LegalCompanyType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -337,9 +385,9 @@ namespace DoDo.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DoDo.Domain.Entities.Authentications.User", b =>
+            modelBuilder.Entity("DoDo.Domain.Entities.Companies.LegalCompanyType", b =>
                 {
-                    b.Navigation("Employees");
+                    b.Navigation("Companies");
                 });
 #pragma warning restore 612, 618
         }

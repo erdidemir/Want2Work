@@ -1,9 +1,11 @@
 ﻿using DoDo.Domain.Configurations.Companies;
-using DoDo.Domain.Configurations.Employees;
+using DoDo.Domain.Configurations.Jobbers;
+using DoDo.Domain.Configurations.Settings;
 using DoDo.Domain.Entities.Authentications;
 using DoDo.Domain.Entities.Commons;
 using DoDo.Domain.Entities.Companies;
-using DoDo.Domain.Entities.Employees;
+using DoDo.Domain.Entities.Jobbers;
+using DoDo.Domain.Entities.Settings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -40,17 +42,15 @@ namespace DoDo.Infrastructure.Contracts.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            #region Settings
 
-            #region Employees
-
-            modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
-
+            modelBuilder.ApplyConfiguration(new CountryConfiguration());
 
             #endregion
 
             #region Companies
 
+            modelBuilder.ApplyConfiguration(new LegalCompanyTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
 
             #endregion
@@ -60,9 +60,15 @@ namespace DoDo.Infrastructure.Contracts.Persistence
 
         }
 
-        #region Employees
+        #region Setings
 
-        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Country> Countries { get; set; }
+
+        #endregion
+
+        #region Companies
+
+        public DbSet<LegalCompanyType> LegalCompanyTypes { get; set; }
         public DbSet<Company> Companies { get; set; }
 
         #endregion

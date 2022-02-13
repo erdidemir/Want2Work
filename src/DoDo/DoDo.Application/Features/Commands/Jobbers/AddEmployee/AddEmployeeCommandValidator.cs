@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoDo.Application.Features.Commands.Employees.AddEmployee
+namespace DoDo.Application.Features.Commands.Jobbers.AddJobber
 {
-    public class AddEmployeeCommandValidator : AbstractValidator<AddEmployeeCommand>
+    public class AddJobberCommandValidator : AbstractValidator<AddJobberCommand>
     {
-        public AddEmployeeCommandValidator()
+        public AddJobberCommandValidator()
         {
             RuleFor(p => p.UserId)
                .NotEmpty().WithMessage("{UserId} is required.");

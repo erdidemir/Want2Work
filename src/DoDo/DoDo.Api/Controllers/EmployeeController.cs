@@ -1,8 +1,8 @@
-﻿using DoDo.Application.Features.Commands.Employees.AddEmployee;
-using DoDo.Application.Features.Commands.Employees.DeleteEmployee;
-using DoDo.Application.Features.Commands.Employees.UpdateEmployee;
-using DoDo.Application.Features.Queries.Employees.GetEmployee;
-using DoDo.Application.Models.Employees;
+﻿using DoDo.Application.Features.Commands.Jobbers.AddJobber;
+using DoDo.Application.Features.Commands.Jobbers.DeleteJobber;
+using DoDo.Application.Features.Commands.Jobbers.UpdateJobber;
+using DoDo.Application.Features.Queries.Jobbers.GetJobber;
+using DoDo.Application.Models.Jobbers;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,50 +15,50 @@ namespace DoDo.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class EmployeeController : ControllerBase
+    public class JobberController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public EmployeeController(IMediator mediator)
+        public JobberController(IMediator mediator)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        [HttpGet("{userId}", Name = "GetEmployee")]
-        [ProducesResponseType(typeof(IEnumerable<EmployeeViewModel>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<EmployeeViewModel>> GetEmployeeByUserName(int userId)
+        [HttpGet("{userId}", Name = "GetJobber")]
+        [ProducesResponseType(typeof(IEnumerable<JobberViewModel>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<JobberViewModel>> GetJobberByUserName(int userId)
         {
-            var query = new GetEmployeeByUserIdQuery(userId);
+            var query = new GetJobberByUserIdQuery(userId);
             var orders = await _mediator.Send(query);
             return Ok(orders);
         }
 
         // testing purpose
-        [HttpPost(Name = "AddEmployee")]
+        [HttpPost(Name = "AddJobber")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult<int>> AddEmployee([FromBody] AddEmployeeCommand command)
+        public async Task<ActionResult<int>> AddJobber([FromBody] AddJobberCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
-        [HttpPut(Name = "UpdateEmployee")]
+        [HttpPut(Name = "UpdateJobber")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult> UpdateEmployee([FromBody] UpdateEmployeeCommand command)
+        public async Task<ActionResult> UpdateJobber([FromBody] UpdateJobberCommand command)
         {
             await _mediator.Send(command);
             return NoContent();
         }
 
-        [HttpDelete("{id}", Name = "DeleteEmployee")]
+        [HttpDelete("{id}", Name = "DeleteJobber")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult> DeleteEmployee(int id)
+        public async Task<ActionResult> DeleteJobber(int id)
         {
-            var command = new DeleteEmployeeCommand() { Id = id };
+            var command = new DeleteJobberCommand() { Id = id };
             await _mediator.Send(command);
             return NoContent();
         }

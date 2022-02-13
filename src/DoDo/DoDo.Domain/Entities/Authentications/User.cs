@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DoDo.Domain.Entities.Employees;
+using DoDo.Domain.Entities.Jobbers;
 using Microsoft.AspNetCore.Identity;
 
 namespace DoDo.Domain.Entities.Authentications
@@ -12,15 +12,17 @@ namespace DoDo.Domain.Entities.Authentications
     {
         public User()
         {
-            Employees = new HashSet<Employee>();
+            //Jobbers = new HashSet<Jobber>();
         }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
-        #region Employees
-        public virtual ICollection<Employee> Employees { get; set; }
+        public byte[] ProfilePicture { get; set; }
 
-        #endregion
+        //#region Jobbers
+        //public virtual ICollection<Jobber> Jobbers { get; set; }
+
+        //#endregion
     }
 }

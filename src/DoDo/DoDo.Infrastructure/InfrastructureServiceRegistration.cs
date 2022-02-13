@@ -1,19 +1,17 @@
 ﻿using DoDo.Application.Contracts.Persistence.Repositories.Commons;
 using DoDo.Application.Contracts.Persistence.Repositories.Companies;
-using DoDo.Application.Contracts.Persistence.Repositories.Employees;
+using DoDo.Application.Contracts.Persistence.Repositories.Jobbers;
 using DoDo.Application.Models.Settings;
 using DoDo.Application.Services.Caches;
 using DoDo.Application.Services.Companies;
-using DoDo.Application.Services.Employees;
+using DoDo.Application.Services.Jobbers;
 using DoDo.Infrastructure.Contracts.Persistence;
 using DoDo.Infrastructure.Contracts.Persistence.Repositories.Commons;
 using DoDo.Infrastructure.Contracts.Persistence.Repositories.Companies;
-using DoDo.Infrastructure.Contracts.Persistence.Repositories.Employees;
+using DoDo.Infrastructure.Contracts.Persistence.Repositories.Jobbers;
 using DoDo.Infrastructure.Services.Caches;
 using DoDo.Infrastructure.Services.Companies;
-using DoDo.Infrastructure.Services.Employees;
-using Hangfire;
-using Hangfire.MySql;
+using DoDo.Infrastructure.Services.Jobbers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,10 +51,10 @@ namespace DoDo.Infrastructure
 
             #endregion
 
-            #region Employees
+            #region Jobbers
 
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IJobberRepository, JobberRepository>();
+            services.AddScoped<IJobberService, JobberService>();
 
             #endregion
 
@@ -67,22 +65,7 @@ namespace DoDo.Infrastructure
 
             #endregion
 
-            #region Caching
 
-            services.AddHangfire(configuration => {
-                configuration.UseStorage(
-                    new MySqlStorage(
-                        mySqlConnectionStr,
-                        new MySqlStorageOptions
-                        {
-                            TablesPrefix = "Hangfire"
-                        }
-                    )
-                );
-            });
-            services.AddHangfireServer();
-
-            #endregion
 
 
 

@@ -5,13 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoDo.Application.Features.Commands.Employees.AddEmployee
+namespace DoDo.Application.Features.Commands.Jobbers.UpdateJobber
 {
-    public class AddEmployeeCommand : IRequest<int>
+    public class UpdateJobberCommand : IRequest
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
     }
 }

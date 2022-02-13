@@ -31,7 +31,6 @@ namespace DoDo.Infrastructure.MiddleWares.Exceptions
         {
             var errorMessage = JsonConvert.SerializeObject(new { Message = ex.Message, Code = "Wrong!" });
 
-
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 

@@ -1,6 +1,6 @@
 ﻿using DoDo.Application.Contracts.Persistence.Repositories.Commons;
-using DoDo.Application.Services.Employees;
-using DoDo.Domain.Entities.Employees;
+using DoDo.Application.Services.Jobbers;
+using DoDo.Domain.Entities.Jobbers;
 using DoDo.Infrastructure.Services.Commons;
 using System;
 using System.Collections.Generic;
@@ -8,18 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoDo.Infrastructure.Services.Employees
+namespace DoDo.Infrastructure.Services.Jobbers
 {
-    public class EmployeeService : ServiceBase<Employee>, IEmployeeService
+    public class JobberService : ServiceBase<Jobber>, IJobberService
     {
-        private readonly IRepositoryBase<Employee> _entityRepository;
-        public EmployeeService(IRepositoryBase<Employee> entityRepository) : base(entityRepository)
+        private readonly IRepositoryBase<Jobber> _entityRepository;
+        public JobberService(IRepositoryBase<Jobber> entityRepository) : base(entityRepository)
         {
             _entityRepository = entityRepository ?? throw new ArgumentNullException(nameof(entityRepository));
 
         }
 
-        public async Task<IReadOnlyList<Employee>> GetEmployeeByUserId(int userId)
+        public async Task<IReadOnlyList<Jobber>> GetJobberByUserId(int userId)
         {
             return await _entityRepository.GetAsync(p=> p.User.Id == userId);
         }

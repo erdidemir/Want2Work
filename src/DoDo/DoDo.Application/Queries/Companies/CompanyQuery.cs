@@ -1,4 +1,4 @@
-﻿using DoDo.Application.Queries.Commons;
+﻿using DoDo.Infrastructure.Queries.Commons;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoDo.Application.Features.Commands.Employees.UpdateEmployee
+namespace DoDo.Application.Features.Commands.Jobbers.UpdateJobber
 {
-    public class UpdateEmployeeCommandValidator : AbstractValidator<UpdateEmployeeCommand>
+    public class UpdateJobberCommandValidator : AbstractValidator<UpdateJobberCommand>
     {
-        public UpdateEmployeeCommandValidator()
+        public UpdateJobberCommandValidator()
         {
             RuleFor(p => p.FirstName)
                 .NotEmpty().WithMessage("{FirstName} is required.")

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DoDo.Application.Models.Employees;
-using DoDo.Application.Services.Employees;
+using DoDo.Application.Models.Jobbers;
+using DoDo.Application.Services.Jobbers;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,29 +9,29 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DoDo.Application.Features.Queries.Employees.GetEmployee
+namespace DoDo.Application.Features.Queries.Jobbers.GetJobber
 {
-    public class GetEmployeeByUserIdQueryHandler : IRequestHandler<GetEmployeeByUserIdQuery, EmployeeViewModel>
+    public class GetJobberByUserIdQueryHandler : IRequestHandler<GetJobberByUserIdQuery, JobberViewModel>
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IJobberService _employeeService;
         private readonly IMapper _mapper;
 
-        public GetEmployeeByUserIdQueryHandler(IEmployeeService employeeService,
+        public GetJobberByUserIdQueryHandler(IJobberService employeeService,
                  IMapper mapper)
         {
             _employeeService = employeeService; 
             _mapper = mapper;
 
         }
-        public async Task<EmployeeViewModel> Handle(GetEmployeeByUserIdQuery request, CancellationToken cancellationToken)
+        public async Task<JobberViewModel> Handle(GetJobberByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var employee = _employeeService.GetEmployeeByUserId(request.UserId).Result.FirstOrDefault();
+            var employee = _employeeService.GetJobberByUserId(request.UserId).Result.FirstOrDefault();
             if (employee is null)
             {
                 return null;
             }
 
-            return _mapper.Map<EmployeeViewModel>(employee);
+            return _mapper.Map<JobberViewModel>(employee);
         }
     }
 }

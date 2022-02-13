@@ -65,10 +65,7 @@ namespace DoDo.Application.Contracts.Persistence.Repositories.Commons
 
         #endregion
 
-        #region Caching
-        Task RefreshCache();
-
-        #endregion
+        
 
     }
 }

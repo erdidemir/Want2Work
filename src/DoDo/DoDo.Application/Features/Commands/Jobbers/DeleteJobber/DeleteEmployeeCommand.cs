@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoDo.Application.Features.Commands.Employees.DeleteEmployee
+namespace DoDo.Application.Features.Commands.Jobbers.DeleteJobber
 {
-    public class DeleteEmployeeCommand : IRequest
+    public class DeleteJobberCommand : IRequest
     {
         public int Id { get; set; }
     }
