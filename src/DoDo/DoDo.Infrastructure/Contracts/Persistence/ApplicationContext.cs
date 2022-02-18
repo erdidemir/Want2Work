@@ -74,5 +74,11 @@ namespace DoDo.Infrastructure.Contracts.Persistence
         public DbSet<Company> Companies { get; set; }
 
         #endregion
+
+        #region Jobbers
+
+        public DbSet<Jobber> Jobbers { get; set; }
+
+        #endregion
     }
 }

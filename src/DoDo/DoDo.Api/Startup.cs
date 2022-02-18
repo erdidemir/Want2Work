@@ -70,27 +70,9 @@ namespace DoDo.Api
             services.AddControllers();
 
             #region JWT 
-            IConfigurationSection jwtSection = Configuration.GetSection("JWT");
-            services.Configure<JwtSettings>(jwtSection);
-            JwtSettings appSettings = jwtSection.Get<JwtSettings>();
-            byte[] key = Encoding.ASCII.GetBytes(appSettings.Secret);
+           
+            services.AddAuth(jwt);
 
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = true;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
             #endregion
 
             #region Swagger 
@@ -163,7 +145,6 @@ namespace DoDo.Api
 
             #endregion
 
-
             #region Authorization
 
             services.AddAuthorization(options =>
@@ -171,6 +152,18 @@ namespace DoDo.Api
                 options.AddPolicy("RequireAdministratorRole",
                      policy => policy.RequireRole("Administrator"));
             });
+
+            #endregion
+
+            #region ExternalLogin
+
+            //services.AddAuthentication().
+            //    AddGoogle(x =>
+            //    {
+            //        x.ClientId = Configuration.GetValue<string>("Secrets:GoogleClientId");
+            //        x.ClientId = Configuration.GetValue<string>("Secrets:GoogleClientId");
+
+            //    });
 
             #endregion
         }

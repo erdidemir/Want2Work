@@ -195,6 +195,32 @@ namespace DoDo.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Jobbers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    Birthdate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "integer", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Jobbers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Jobbers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new
                 {
@@ -273,6 +299,11 @@ namespace DoDo.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Jobbers_UserId",
+                table: "Jobbers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "UIX_Name1",
                 table: "LegalCompanyTypes",
                 column: "Name",
@@ -303,13 +334,16 @@ namespace DoDo.Infrastructure.Migrations
                 name: "Countries");
 
             migrationBuilder.DropTable(
+                name: "Jobbers");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "LegalCompanyTypes");
 
             migrationBuilder.DropTable(
-                name: "LegalCompanyTypes");
+                name: "AspNetUsers");
         }
     }
 }

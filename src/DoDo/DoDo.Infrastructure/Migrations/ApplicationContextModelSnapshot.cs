@@ -193,6 +193,44 @@ namespace DoDo.Infrastructure.Migrations
                     b.ToTable("LegalCompanyTypes");
                 });
 
+            modelBuilder.Entity("DoDo.Domain.Entities.Jobbers.Jobber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("Birthdate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Jobbers");
+                });
+
             modelBuilder.Entity("DoDo.Domain.Entities.Settings.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -341,6 +379,17 @@ namespace DoDo.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("LegalCompanyType");
+                });
+
+            modelBuilder.Entity("DoDo.Domain.Entities.Jobbers.Jobber", b =>
+                {
+                    b.HasOne("DoDo.Domain.Entities.Authentications.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
