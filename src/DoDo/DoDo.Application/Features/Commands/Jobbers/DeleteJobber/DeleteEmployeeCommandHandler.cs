@@ -15,27 +15,27 @@ namespace DoDo.Application.Features.Commands.Jobbers.DeleteJobber
 {
     public class DeleteJobberCommandHandler : IRequestHandler<DeleteJobberCommand>
     {
-        private readonly IJobberService _employeeService;
+        private readonly IJobberService _jobberService;
         private readonly IMapper _mapper;
         private readonly ILogger<DeleteJobberCommandHandler> _logger;
 
-        public DeleteJobberCommandHandler(IJobberService employeeService, IMapper mapper, ILogger<DeleteJobberCommandHandler> logger)
+        public DeleteJobberCommandHandler(IJobberService jobberService, IMapper mapper, ILogger<DeleteJobberCommandHandler> logger)
         {
-            _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
+            _jobberService = jobberService ?? throw new ArgumentNullException(nameof(jobberService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<Unit> Handle(DeleteJobberCommand request, CancellationToken cancellationToken)
         {
-            var employeeToDelete = await _employeeService.GetByIdAsync(request.Id);
-            if (employeeToDelete == null)
+            var jobberToDelete = await _jobberService.GetByIdAsync(request.Id);
+            if (jobberToDelete == null)
             {
                 throw new NotFoundException(nameof(Jobber), request.Id);
             }
 
-            await _employeeService.RemoveAsync(employeeToDelete);
-            _logger.LogInformation($"Jobber {employeeToDelete.Id} is successfully deleted.");
+            await _jobberService.RemoveAsync(jobberToDelete);
+            _logger.LogInformation($"Jobber {jobberToDelete.Id} is successfully deleted.");
 
             return Unit.Value;
         }

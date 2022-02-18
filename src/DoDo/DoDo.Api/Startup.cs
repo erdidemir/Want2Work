@@ -5,6 +5,7 @@ using DoDo.Domain.Entities.Authentications;
 using DoDo.Infrastructure;
 using DoDo.Infrastructure.Contracts.Persistence;
 using DoDo.Infrastructure.MiddleWares.Exceptions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,11 +15,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
+using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 namespace DoDo.Api
 {
@@ -36,7 +42,7 @@ namespace DoDo.Api
         {
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration);
-            
+
             #region Settings
 
             services.Configure<JwtSettings>(Configuration.GetSection("JWT"));
@@ -62,10 +68,101 @@ namespace DoDo.Api
             services.ConfigureCors();
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+
+            #region JWT 
+            IConfigurationSection jwtSection = Configuration.GetSection("JWT");
+            services.Configure<JwtSettings>(jwtSection);
+            JwtSettings appSettings = jwtSection.Get<JwtSettings>();
+            byte[] key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services.AddAuthentication(x =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DoDo.Api", Version = "v1" });
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
             });
+            #endregion
+
+            #region Swagger 
+            string version = "v1";
+            services.AddSwaggerGen(gen =>
+            {
+                OpenApiSecurityScheme securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "Jwt Bearer Token **_only_**",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    },
+                };
+
+                gen.SwaggerDoc(version, new OpenApiInfo
+                {
+                    Title = "Want2Work Wep Api",
+                    Version = version,
+                    License = new OpenApiLicense
+                    {
+                        Name = "Powered by Want2Work",
+                        Url = new Uri("https://wantowork.de/"),
+                    },
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Erdi Demir",
+                        Email = "erdi.demir@erdidemir.com.tr"
+                    }
+                });
+
+                gen.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+                gen.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {securityScheme, new string[] { }}
+                });
+                gen.UseAllOfToExtendReferenceSchemas();
+                gen.IncludeXmlCommentsFromInheritDocs(includeRemarks: true, excludedTypes: typeof(string));
+                gen.AddEnumsWithValuesFixFilters(services, o =>
+                {
+                    // add schema filter to fix enums (add 'x-enumNames' for NSwag) in schema
+                    o.ApplySchemaFilter = true;
+
+                    // add parameter filter to fix enums (add 'x-enumNames' for NSwag) in schema parameters
+                    o.ApplyParameterFilter = true;
+
+                    // add document filter to fix enums displaying in swagger document
+                    o.ApplyDocumentFilter = true;
+
+                    // add descriptions from DescriptionAttribute or xml-comments to fix enums (add 'x-enumDescriptions' for schema extensions) for applied filters
+                    o.IncludeDescriptions = true;
+
+                    // add remarks for descriptions from xml-comments
+                    o.IncludeXEnumRemarks = true;
+
+                    // get descriptions from DescriptionAttribute then from xml-comments
+                    o.DescriptionSource = DescriptionSources.DescriptionAttributesThenXmlComments;
+
+
+                });
+            });
+
+
+
+            #endregion
+
 
             #region Authorization
 

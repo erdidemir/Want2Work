@@ -15,30 +15,30 @@ namespace DoDo.Application.Features.Commands.Jobbers.UpdateJobber
 {
     public class UpdateJobberCommandHandler : IRequestHandler<UpdateJobberCommand>
     {
-        private readonly IJobberService _employeeService;
+        private readonly IJobberService _jobberService;
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateJobberCommandHandler> _logger;
 
-        public UpdateJobberCommandHandler(IJobberService employeeService, IMapper mapper, ILogger<UpdateJobberCommandHandler> logger)
+        public UpdateJobberCommandHandler(IJobberService jobberService, IMapper mapper, ILogger<UpdateJobberCommandHandler> logger)
         {
-            _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
+            _jobberService = jobberService ?? throw new ArgumentNullException(nameof(jobberService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<Unit> Handle(UpdateJobberCommand request, CancellationToken cancellationToken)
         {
-            var employeeToUpdate = await _employeeService.GetByIdAsync(request.Id);
-            if (employeeToUpdate == null)
+            var jobberToUpdate = await _jobberService.GetByIdAsync(request.Id);
+            if (jobberToUpdate == null)
             {
                 throw new NotFoundException(nameof(Jobber), request.Id);
             }
 
-            _mapper.Map(request, employeeToUpdate, typeof(UpdateJobberCommand), typeof(Jobber));
+            _mapper.Map(request, jobberToUpdate, typeof(UpdateJobberCommand), typeof(Jobber));
 
-            await _employeeService.UpdateAsync(employeeToUpdate);
+            await _jobberService.UpdateAsync(jobberToUpdate);
 
-            _logger.LogInformation($"Jobber {employeeToUpdate.Id} is successfully updated.");
+            _logger.LogInformation($"Jobber {jobberToUpdate.Id} is successfully updated.");
 
             return Unit.Value;
         }

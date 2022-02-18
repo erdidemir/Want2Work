@@ -13,25 +13,25 @@ namespace DoDo.Application.Features.Queries.Jobbers.GetJobber
 {
     public class GetJobberByUserIdQueryHandler : IRequestHandler<GetJobberByUserIdQuery, JobberViewModel>
     {
-        private readonly IJobberService _employeeService;
+        private readonly IJobberService _jobberService;
         private readonly IMapper _mapper;
 
-        public GetJobberByUserIdQueryHandler(IJobberService employeeService,
+        public GetJobberByUserIdQueryHandler(IJobberService jobberService,
                  IMapper mapper)
         {
-            _employeeService = employeeService; 
+            _jobberService = jobberService; 
             _mapper = mapper;
 
         }
         public async Task<JobberViewModel> Handle(GetJobberByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var employee = _employeeService.GetJobberByUserId(request.UserId).Result.FirstOrDefault();
-            if (employee is null)
+            var jobber = _jobberService.GetJobberByUserId(request.UserId).Result.FirstOrDefault();
+            if (jobber is null)
             {
                 return null;
             }
 
-            return _mapper.Map<JobberViewModel>(employee);
+            return _mapper.Map<JobberViewModel>(jobber);
         }
     }
 }

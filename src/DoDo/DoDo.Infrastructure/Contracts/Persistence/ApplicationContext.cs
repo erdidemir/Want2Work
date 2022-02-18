@@ -23,22 +23,24 @@ namespace DoDo.Infrastructure.Contracts.Persistence
         {
         }
 
-        //public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        //{
-        //    foreach (var entry in ChangeTracker.Entries<EntityBase>())
-        //    {
-        //        switch (entry.State)
-        //        {
-        //            case EntityState.Added:
-        //                entry.Entity.CreatedDate = DateTime.Now;
-        //                break;
-        //            case EntityState.Modified:
-        //                entry.Entity.LastModifiedDate = DateTime.Now;
-        //                break;
-        //        }
-        //    }
-        //    return base.SaveChangesAsync(cancellationToken);
-        //}
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            foreach (var entry in ChangeTracker.Entries<EntityBase>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedDate = DateTime.Now;
+                        entry.Entity.LastModifiedDate = DateTime.Now;
+
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedDate = DateTime.Now;
+                        break;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

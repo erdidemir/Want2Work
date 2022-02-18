@@ -14,23 +14,23 @@ namespace DoDo.Application.Features.Commands.Jobbers.AddJobber
 {
     public class AddJobberCommandHandler : IRequestHandler<AddJobberCommand, int>
     {
-        private readonly IJobberService _employeeService;
+        private readonly IJobberService _jobberService;
         private readonly IMapper _mapper;
         private readonly ILogger<AddJobberCommandHandler> _logger;
-        public AddJobberCommandHandler(IJobberService employeeService,
+        public AddJobberCommandHandler(IJobberService jobberService,
             IMapper mapper,
             ILogger<AddJobberCommandHandler> logger)
         {
-            _employeeService = employeeService; 
+            _jobberService = jobberService; 
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task<int> Handle(AddJobberCommand request, CancellationToken cancellationToken)
         {
-            var employeeEntity = _mapper.Map<Jobber>(request);
+            var jobberEntity = _mapper.Map<Jobber>(request);
 
-            var newJobber = _employeeService.AddAsync(employeeEntity);
+            var newJobber = _jobberService.AddAsync(jobberEntity);
 
             _logger.LogInformation($"Jobber {newJobber.Id} is successfully created.");
 

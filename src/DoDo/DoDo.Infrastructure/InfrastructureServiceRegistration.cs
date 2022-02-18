@@ -27,10 +27,14 @@ namespace DoDo.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            string mySqlConnectionStr = configuration.GetConnectionString("DefaultConnection");
+            //string mySqlConnectionStr = configuration.GetConnectionString("DefaultConnection");
+
+            //services.AddDbContext<ApplicationContext>(options =>
+            //                                 options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
 
             services.AddDbContext<ApplicationContext>(options =>
-                                             options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
+                                             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
 
             #region Authentications
 
