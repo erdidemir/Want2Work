@@ -157,13 +157,13 @@ namespace DoDo.Api
 
             #region ExternalLogin
 
-            //services.AddAuthentication().
-            //    AddGoogle(x =>
-            //    {
-            //        x.ClientId = Configuration.GetValue<string>("Secrets:GoogleClientId");
-            //        x.ClientId = Configuration.GetValue<string>("Secrets:GoogleClientId");
+            services.AddAuthentication().
+                AddGoogle(x =>
+                {
+                    x.ClientId = Configuration.GetValue<string>("Secrets:GoogleClientId");
+                    x.ClientSecret = Configuration.GetValue<string>("Secrets:GoogleClientSecret");
 
-            //    });
+                });
 
             #endregion
         }

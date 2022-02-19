@@ -30,7 +30,7 @@ namespace DoDo.Application.Features.Commands.Jobbers.AddJobber
         {
             var jobberEntity = _mapper.Map<Jobber>(request);
 
-            var newJobber = _jobberService.AddAsync(jobberEntity);
+            var newJobber = await _jobberService.AddAsync(jobberEntity);
 
             _logger.LogInformation($"Jobber {newJobber.Id} is successfully created.");
 
