@@ -149,8 +149,8 @@ namespace DoDo.Api
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireAdministratorRole",
-                     policy => policy.RequireRole("Administrator"));
+                options.AddPolicy("RequireJobberRole",
+                     policy => policy.RequireRole("Jobber"));
             });
 
             #endregion
@@ -182,8 +182,9 @@ namespace DoDo.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
+          
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
 
             app.UseEndpoints(endpoints =>

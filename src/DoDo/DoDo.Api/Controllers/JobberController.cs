@@ -4,15 +4,18 @@ using DoDo.Application.Features.Commands.Jobbers.UpdateJobber;
 using DoDo.Application.Features.Queries.Jobbers.GetJobber;
 using DoDo.Application.Models.Jobbers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DoDo.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class JobberController : ControllerBase
@@ -24,10 +27,12 @@ namespace DoDo.Api.Controllers
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        [HttpGet("{userId}", Name = "GetJobber")]
+        [Authorize(Policy = "RequireJobberRole")]
+        [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<JobberViewModel>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<JobberViewModel>> GetJobberByUserName(int userId)
+        public async Task<ActionResult<JobberViewModel>> GetJobberByUserName()
         {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var query = new GetJobberByUserIdQuery(userId);
             var orders = await _mediator.Send(query);
             return Ok(orders);
